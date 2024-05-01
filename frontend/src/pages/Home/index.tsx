@@ -7,7 +7,6 @@ const Home = () => {
   const contextData = useAuthContext();
   const { authUser } = contextData;
   const { sideBarsUsers } = useSidebarUser({ authUser });
-  console.log({ contextData }, { sideBarsUsers });
 
   return (
     <div className='text-white'>

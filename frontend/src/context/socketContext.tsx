@@ -22,7 +22,6 @@ export const SocketContextProvider = ({ children }: SocketProps) => {
   useEffect(() => {
     let socketInstance: any = null;
     if (authUser) {
-      console.log('HITTED123', authUser);
       socketInstance = io('http://localhost:5000', {
         query: {
           userId: authUser?._id,
@@ -30,7 +29,6 @@ export const SocketContextProvider = ({ children }: SocketProps) => {
       });
       setSocket(socketInstance);
       socketInstance.on('getOnlineUsers', (users: any) => {
-        console.log('LISTEN', users);
         setOnlineUsers(users);
       });
     } else {
@@ -47,7 +45,6 @@ export const SocketContextProvider = ({ children }: SocketProps) => {
       }
     };
   }, [authUser]);
-  console.log({ onlineUsers });
   return (
     <socketContext.Provider value={{ socket, onlineUsers }}>
       {children}

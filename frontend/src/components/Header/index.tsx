@@ -8,14 +8,12 @@ import axios from 'axios';
 const Header = () => {
   const [isPopShow, setPopShow] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isLoading, setLoading] = useState(false);
+  // const [isLoading, setLoading] = useState(false);
   const { openPortal, closePortal } = usePortal();
   const contextData = useAuthContext();
   const { authUser, setAuthUser } = contextData;
-  console.log({ contextData });
-
+  console.log({ authUser });
   const handleOpenAuth = async () => {
-    console.log('HITTED');
     if (!authUser?.userName) {
       openPortal(<AuthComponent onClose={closePortal} />);
     } else {
@@ -25,8 +23,7 @@ const Header = () => {
           url: '/api/auth/logout',
           headers: { 'Content-Type': 'application/json' },
         });
-        setLoading(false);
-        console.log({ response });
+        // setLoading(false);
         const { data } = response;
         if (data.error) {
           throw new Error(data.error);
@@ -34,11 +31,10 @@ const Header = () => {
         localStorage.removeItem('chat-user');
         setAuthUser(null);
       } catch (error) {
-        setLoading(false);
+        // setLoading(false);
         console.log('Error while submiting login request', error);
       }
     }
-    console.log('HITTEDD');
     localStorage.removeItem('chat-user');
   };
 
@@ -48,10 +44,19 @@ const Header = () => {
     }
   };
 
+  const handleClick = () => {
+    setPopShow((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      setIsMobile(width <= 768); // Adjust the threshold as needed
+      if (width <= 1024) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+      // Adjust the threshold as needed
     };
 
     window.addEventListener('resize', handleResize);
@@ -65,7 +70,7 @@ const Header = () => {
     <header className='wrapper'>
       <div className='header-wrapper flex justify-between items-center mt-4 md:mt-2'>
         <h1>
-          <a href='/' className='font-bold text-[20px] md:text-[30px]'>
+          <a href='/' className='font-bold text-[25px] md:text-[30px]'>
             <span className='text-[#EB4E17] '>Chat</span> App
           </a>
         </h1>
@@ -73,14 +78,23 @@ const Header = () => {
           className='relative pb-3'
           onMouseEnter={() => handleMouseEvent(true)}
           onMouseLeave={() => handleMouseEvent(false)}
+          onClick={handleClick}
         >
-          <img
-            src='/icons/avatar.svg'
-            alt='Avatar'
-            className='w-[30px] h-[30px] cursor-pointer mt-[10px]'
-          />
+          {!authUser?.userName ? (
+            <img
+              src='/icons/avatar.svg'
+              alt='Avatar'
+              className='w-[40px] h-[40px] cursor-pointer mt-[10px]'
+            />
+          ) : (
+            <span className='user w-[40px] h-[40px] flex items-center justify-center rounded-full border-[2px] border-solid border-white'>
+              <span className='font-extrabold text-[1rem]'>
+                {authUser?.userName}
+              </span>
+            </span>
+          )}
           <ul
-            className={`absolute pt-3 top-[40px] left-0 w-[100px] bg-white py-3 px-3 ${
+            className={`absolute pt-3 top-[50px] right-0 w-[100px] bg-white py-3 px-3 ${
               isPopShow ? 'block' : 'hidden'
             }`}
           >

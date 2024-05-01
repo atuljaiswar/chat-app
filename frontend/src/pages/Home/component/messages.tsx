@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 import { useAuthContext } from '../../../context/authContext';
 import SkeletonMessage from './skelton';
@@ -10,8 +10,6 @@ const Messages = (props: any) => {
   const { authUser } = useAuthContext();
   const { socket } = useSocketContext();
   const lastMessageRef = useRef<HTMLDivElement | null>();
-
-  console.log('MESSSSSAGES---------->', messages);
 
   useEffect(() => {
     socket.on('newMessage', (newMessage: any) => {

@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const useSidebarUser = (props: any) => {
   const { authUser } = props;
-  const [isLoading, setLoading] = useState(false);
+  // const [isLoading, setLoading] = useState(false);
   const [sideBarsUsers, setSideBarUser] = useState(null);
   const fetchUserData = async () => {
     try {
@@ -11,7 +11,6 @@ const useSidebarUser = (props: any) => {
         method: 'GET',
         url: '/api/users',
       });
-      console.log({ response });
       setSideBarUser(response?.data?.sidebarUsers);
     } catch (error) {
       console.log('Error while fetching sidebar user', error);

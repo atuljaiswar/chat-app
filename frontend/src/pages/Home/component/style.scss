@@ -19,3 +19,9 @@
     border-radius: 10px;
   }
 }
+
+.MuiInputBase-input {
+  @media screen and (max-width: 1024px) {
+    padding: 12px 10px !important;
+  }
+}

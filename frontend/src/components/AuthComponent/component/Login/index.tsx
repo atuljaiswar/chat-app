@@ -1,16 +1,15 @@
-import { Button, Container, InputLabel } from '@mui/material';
+import { Button, Container, InputLabel, CircularProgress } from '@mui/material';
 import { useForm, FormProvider } from 'react-hook-form';
 import TextFieldCompo from '../../../TextField';
 import './style.scss';
 import useAuthentication from '../../../../hooks/useAuthentication';
 
 const LoginForm = ({ setToggale }: any) => {
-  const { handleLoginSubmit } = useAuthentication();
+  const { handleLoginSubmit, isLoading } = useAuthentication({ setToggale });
   const methods = useForm();
   const { control, handleSubmit } = methods;
 
   const onSubmit = (data: any) => {
-    console.log({ data });
     handleLoginSubmit(data);
   };
 
@@ -54,7 +53,13 @@ const LoginForm = ({ setToggale }: any) => {
               variant='contained'
               sx={{ display: 'block', width: '100%', borderRadius: '5px' }}
             >
-              Login
+              {isLoading ? (
+                <CircularProgress
+                  style={{ color: '#fff', width: '30px', height: '30px' }}
+                />
+              ) : (
+                'Login'
+              )}
             </Button>
           </Container>
         </form>

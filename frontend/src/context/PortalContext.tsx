@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  useRef,
-} from 'react';
+import { createContext, useState, useContext, useEffect, useRef } from 'react';
 
 interface PortalContextProps {
   isOpen: boolean;
@@ -19,7 +13,7 @@ const PortalContext = createContext<PortalContextProps | undefined>(undefined);
 export const PortalProvider = ({ children }: any) => {
   const [isOpen, setIsOpen] = useState(false);
   const [portalContent, setPortalContent] = useState(null);
-  const [modalRoot, setModalRoot] = useState(null);
+  // const [modalRoot, setModalRoot] = useState(null);
   const rootElem = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -38,7 +32,6 @@ export const PortalProvider = ({ children }: any) => {
   }, []);
 
   const openPortal = (content: any) => {
-    console.log('openPortal');
     setIsOpen(true);
     setPortalContent(content);
   };

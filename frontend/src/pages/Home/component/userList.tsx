@@ -9,7 +9,7 @@ import {
   Badge,
 } from '@mui/material';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuthContext } from '../../../context/authContext';
 import './style.scss';
 import ChartRoom from './chartRoom';
@@ -30,8 +30,9 @@ interface SideBarUserProps {
 const userList: React.FC<SideBarUserProps> = (props) => {
   const [searchText, setSearchText] = useState(''); // State to store search term
   const [chatingTo, setChating] = useState<any>(null);
+  const [isDesktop, setDevice] = useState(false);
   const { authUser } = useAuthContext();
-  const { socket, onlineUsers } = useSocketContext();
+  const { onlineUsers } = useSocketContext();
   const { sideBarsUsers } = props;
   const handleSearchChange = (event: any) => {
     const inputValue = event.target.value.toLowerCase();
@@ -40,7 +41,6 @@ const userList: React.FC<SideBarUserProps> = (props) => {
 
   const handleItemClick = (userId: any) => {
     // Handle click event for the list item with the specified userId
-    console.log('Clicked user ID:', userId);
     const currentChatingUser = sideBarsUsers?.find(
       (item) => item?._id === userId
     );
@@ -48,24 +48,40 @@ const userList: React.FC<SideBarUserProps> = (props) => {
   };
 
   const userList = useMemo(() => {
-    console.log('HItedd');
     let data = null;
     if (sideBarsUsers?.length && searchText) {
       data = sideBarsUsers?.filter((item) =>
         item?.fullname.includes(searchText)
       );
-      console.log('data', data);
     } else {
-      console.log('ELSe');
       data = sideBarsUsers;
     }
     return data;
   }, [searchText, sideBarsUsers]);
 
-  console.log({ sideBarsUsers }, { chatingTo });
+  const handleSize = () => {
+    if (window.innerWidth >= 1024) {
+      setDevice(true);
+    } else {
+      setDevice(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleSize);
+    handleSize();
+    return () => {
+      window.removeEventListener('resize', handleSize);
+    };
+  }, []);
+
   return (
-    <Box className='custom-box flex w-[800px] min-h-[500px] '>
-      <Box className='border-r-[1px] py-[20px] px-[15px] basis-[45%]'>
+    <Box className='custom-box flex w-full lg:w-[800px] min-h-[500px]'>
+      <Box
+        className={`border-r-[1px] py-[20px] px-[15px] basis-full lg:basis-[45%] ${
+          isDesktop ? 'block' : !chatingTo ? 'block' : 'hidden'
+        }`}
+      >
         <Box className='flex items-center'>
           <TextField
             variant='outlined'
@@ -99,7 +115,7 @@ const userList: React.FC<SideBarUserProps> = (props) => {
               },
             }}
           />
-          <figure className='w-[50px] h-[50px] relative rounded-full bg-[#0886e8] ml-4'>
+          <figure className='w-[40px] h-[40px] lg:w-[50px] lg:h-[50px] relative rounded-full bg-[#0886e8] ml-4'>
             <img
               src='/icons/search.svg'
               alt='Search'
@@ -110,7 +126,6 @@ const userList: React.FC<SideBarUserProps> = (props) => {
         <List>
           {userList?.map((user) => {
             const isOnline = onlineUsers.includes(user?._id);
-            console.log({ user }, { onlineUsers }, { isOnline });
             return (
               <ListItem
                 key={user?._id}
@@ -139,8 +154,18 @@ const userList: React.FC<SideBarUserProps> = (props) => {
           })}
         </List>
       </Box>
-      <Box className='basis-[55%] '>
-        {<ChartRoom authUser={authUser} chatingTo={chatingTo} />}
+      <Box
+        className={`basis-full lg:basis-[55%] ${
+          isDesktop ? 'block' : chatingTo ? 'block' : 'hidden'
+        }`}
+      >
+        {
+          <ChartRoom
+            authUser={authUser}
+            chatingTo={chatingTo}
+            setChating={setChating}
+          />
+        }
       </Box>
     </Box>
   );

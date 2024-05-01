@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { set } from 'react-hook-form';
 
 const useSendMessage = () => {
   const [messages, setMessages] = useState(null);
   const [getMsgLoading, setGetMsgLoading] = useState(false);
   const sendMessage = async (data: any, receiverId: string) => {
-    console.log('HITTED', data);
     try {
       const response = await axios({
         method: 'POST',
@@ -16,7 +14,6 @@ const useSendMessage = () => {
         url: `/api/messages/send/${receiverId}`,
         data: JSON.stringify({ message: data?.message }),
       });
-      console.log({ response }, { messages });
       let tempState: any = messages;
       tempState = [...tempState, response?.data];
       setMessages(tempState);
@@ -30,7 +27,6 @@ const useSendMessage = () => {
     try {
       setGetMsgLoading(true);
       const response = await axios.get(`api/messages/${userId}`);
-      console.log('getMessages', response);
       setMessages(response?.data);
       setGetMsgLoading(false);
     } catch (error) {

@@ -1,10 +1,5 @@
 import TextField from '@mui/material/TextField';
-import {
-  useForm,
-  FormProvider,
-  useFormContext,
-  Controller,
-} from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import './style.scss';
 // import { makeStyles, createStyles } from '@mui/styles';
 
@@ -31,11 +26,7 @@ interface TextFieldProps {
 
 const TextFieldCompo: React.FC<TextFieldProps> = (props) => {
   const { control, placeholder, name, type, required = false } = props;
-  const methods = useForm();
-  const {
-    formState: { errors },
-  } = methods;
-  console.log({ errors });
+
   return (
     <Controller
       name={name} // Field name for form data

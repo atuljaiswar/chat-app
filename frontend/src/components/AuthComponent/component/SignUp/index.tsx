@@ -2,31 +2,28 @@ import {
   Button,
   Container,
   InputLabel,
-  Checkbox,
   FormControlLabel,
   FormControl,
   RadioGroup,
   Radio,
   Typography,
+  CircularProgress,
 } from '@mui/material';
 import TextFieldCompo from '../../../TextField';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import './style.scss';
-import CheckboxCompo from '../../../Checkbox';
 import useAuthentication from '../../../../hooks/useAuthentication';
 
-const SignUpForm = ({ setToggale }: any) => {
-  const { handleSignSubmit } = useAuthentication();
+const SignUpForm = ({ setToggale, setSubmit }: any) => {
+  const { handleSignSubmit, isLoading } = useAuthentication({
+    setToggale,
+    setSubmit,
+  });
   const methods = useForm();
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = methods;
+  const { control, handleSubmit } = methods;
 
   const onSubmit = (data: any) => {
     handleSignSubmit(data);
-    console.log({ data });
   };
   return (
     <div className='signup-form'>
@@ -126,7 +123,7 @@ const SignUpForm = ({ setToggale }: any) => {
               variant='contained'
               sx={{ display: 'block', width: '100%', borderRadius: '5px' }}
             >
-              Sign Up
+              {isLoading ? <CircularProgress /> : 'Sign Up'}
             </Button>
           </Container>
         </form>

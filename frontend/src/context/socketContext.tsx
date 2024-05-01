@@ -22,7 +22,8 @@ export const SocketContextProvider = ({ children }: SocketProps) => {
   useEffect(() => {
     let socketInstance: any = null;
     if (authUser) {
-      socketInstance = io('http://localhost:5000', {
+      // development mode the url BE local url that "http://localhost:5000" but as we became live we need to replace live URL
+      socketInstance = io('https://chat-app-frk9.onrender.com', {
         query: {
           userId: authUser?._id,
         },

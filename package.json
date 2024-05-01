@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon backend/server.ts",
     "start": "ts-node backend/server.ts",
-    "build": "npm install && cd frontend && npm install && npm run build && cd .."
+    "build": "npm install && cd frontend && npm install && npm run build --force && cd .."
   },
   "keywords": [],
   "author": "",

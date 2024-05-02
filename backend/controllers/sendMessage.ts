@@ -9,7 +9,6 @@ interface AuthenticatedRequest extends Request {
 
 const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    console.log('body', req.body);
     const { message } = req.body;
     const { id: receiverId } = req.params;
     const senderId = req?.user?._id;
@@ -40,6 +39,8 @@ const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
 
     // this will run in parallel
     Promise.all([conversation.save(), newMessage.save()]);
+    const test = await Message.findOne({ _id: newMessage?._id });
+
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('newMessage', newMessage);

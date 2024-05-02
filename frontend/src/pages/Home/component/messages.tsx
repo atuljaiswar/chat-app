@@ -4,6 +4,7 @@ import { useAuthContext } from '../../../context/authContext';
 import SkeletonMessage from './skelton';
 import { useSocketContext } from '../../../context/socketContext';
 import notificationSound from '../../../../public/iphone_notification.mp3';
+import { extractTime } from '../../../../utils/extractTime';
 
 const Messages = (props: any) => {
   const { messages, chatingTo, getMsgLoading, setMessages } = props;
@@ -61,14 +62,20 @@ const Messages = (props: any) => {
                     key={index}
                     ref={lastMsgBox ? lastMessageRef : undefined}
                   >
-                    <span
-                      key={index}
-                      className={`${
-                        fromMe ? 'bg-[#007bff]' : 'bg-gray-500'
-                      } inline-block text-white px-4 py-2 rounded-[20px]`}
-                    >
-                      {item?.message}
-                    </span>
+                    <Box className='flex flex-col'>
+                      <span
+                        key={index}
+                        className={`${
+                          fromMe ? 'bg-[#007bff]' : 'bg-gray-500'
+                        } inline-block text-white px-4 py-2 rounded-[20px]`}
+                      >
+                        {item?.message}
+                      </span>
+                      <span className='chat-footer opacity-50 text-xs flex gap-1 items-center ml-auto'>
+                        {extractTime(item?.createdAt)}
+                      </span>
+                    </Box>
+
                     <img
                       src={`${
                         fromMe ? authUser?.profilePic : chatingTo?.profilePic
